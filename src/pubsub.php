@@ -2,19 +2,19 @@
 
 class PS
 {
-    private static $events = []; // all subscriptions
+    private static $events = []; // all events
 
     private function __construct() { }
     private function __clone() { }
 
     /**
-     * Subscribe a handler to a channel
+     * Attach an event handler function for one or more events
      *
      * @param string   $name
      * @param callable $handler
      * 
      */
-    public static function subscribe(string $name, callable $handler)
+    public static function on(string $name, callable $handler)
     {
         if (empty(self::$events[$name]))
         {
@@ -25,13 +25,26 @@ class PS
     }
 
     /**
-     * Calls the last subscription in the stack
+     * Remove an event handler
      *
      * @param string $name
-     * @param string $args
      * 
      */
-    public static function publish(string $name)
+    public static function off($name)
+    {
+        if (!empty(self::$events[$name]))
+        {
+            unset(self::$events[$name]);
+        }
+    }
+
+    /**
+     * Execute all handlers and behaviors attached to the matched elements for the given event
+     *
+     * @param string $name
+     * 
+     */
+    public static function trigger(string $name)
     {
         if (empty(self::$events[$name]))
         {
@@ -71,21 +84,21 @@ class PS
     }
 
     /**
-     * To unsubscribe from events
+     * List of events
      *
-     * @param string $name
-     * 
      */
-    public static function unsubscribe($name)
+    public static function list(string $name = '')
     {
-        if (!empty(self::$events[$name]))
+        if ($name && !empty(self::$events[$name]))
         {
-            unset(self::$events[$name]);
+            return self::$events[$name];
         }
+
+        return self::$events;
     }
 
     /**
-     * Unsubscribe all subscriptions
+     * Clears all existing events
      *
      */
     public static function flush()
@@ -97,19 +110,5 @@ class PS
                 unset(self::$events[$name]);
             }
         }
-    }
-
-    /**
-     * List of events
-     *
-     */
-    public static function subscription(string $name = '')
-    {
-        if ($name && !empty(self::$events[$name]))
-        {
-            return self::$events[$name];
-        }
-
-        return self::$events;
     }
 }

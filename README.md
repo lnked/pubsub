@@ -8,7 +8,7 @@ php composer.phar require lnked/pubsub
 Add an event onto the stack, you can add more than one event in one name:
 
 ```php
-PS::subscribe('event-name', function ($message) {
+PS::on('event-name', function ($message) {
     print_r($message);
 });
 ```
@@ -16,19 +16,40 @@ PS::subscribe('event-name', function ($message) {
 Trigger event, by name:
 
 ```php
-PS::publish('event-name');
-PS::publish('event-name', 'event-parameter');
-PS::publish('event-name', [1, 2, 3]);
+PS::trigger('event-name');
+PS::trigger('event-name', 'event-parameter');
+PS::trigger('event-name', [1, 2, 3]);
 ```
 
 ### Methods
 
-subscribe(<name>, <handler>)
+# Attach an event handler function for one or more events
+```php
+PS::on('event-name', function(message) {
+    echo $message;
+});
+```
 
-publish(<name>)
+# Remove an event handler
+```php
+PS::off('event-name');
+```
 
-unsubscribe(<name>)
+# Execute all handlers and behaviors attached to the matched elements for the given event
+```php
+PS::trigger('event-name');
+PS::trigger('event-name', 'test');
+PS::trigger('event-name', [1, 2]);
+PS::trigger('event-name', 1, 2, 3);
+```
 
-subscription()
+# List of events
+```php
+PS::list();
+PS::list('event-name');
+```
 
-flush()
+#Clears all existing events
+```php
+PS::flush();
+```
