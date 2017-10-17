@@ -1,21 +1,7 @@
-# pubsub
-
-```shell
-curl -s http://getcomposer.org/installer | php
-php composer.phar require lnked/pubsub
-```
-
-You can then load `.env` in your application with:
-
-```php
-$dotenv = new Dotenv\Dotenv(__DIR__);
-$dotenv->load();
-```
-
-
-### Methods
-
 <?php
+
+// EXAMPLE
+include __DIR__ . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'pubsub.php';
 
 // Basic usage
 PS::subscribe('beforeSave', function ($message) {
