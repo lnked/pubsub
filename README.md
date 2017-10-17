@@ -5,42 +5,30 @@ curl -s http://getcomposer.org/installer | php
 php composer.phar require lnked/pubsub
 ```
 
-You can then load `.env` in your application with:
+Add an event onto the stack, you can add more than one event in one name:
 
 ```php
-$dotenv = new Dotenv\Dotenv(__DIR__);
-$dotenv->load();
+PS::subscribe('event-name', function ($message) {
+    print_r($message);
+});
 ```
 
+Trigger event, by name:
+
+```php
+PS::publish('event-name');
+PS::publish('event-name', 'event-parameter');
+PS::publish('event-name', [1, 2, 3]);
+```
 
 ### Methods
 
-<?php
+subscribe(<name>, <handler>)
 
-// Basic usage
-PS::subscribe('beforeSave', function ($message) {
-    echo 'PS::beforeSave', '<br>', print_r($message), '<br>', '<br>';
-});
+publish(<name>)
 
-PS::subscribe('beforeSave', function ($message) {
-    echo 'PS::beforeSave', '<br>', print_r($message), '<br>', '<br>';
-});
+unsubscribe(<name>)
 
-PS::subscribe('beforeSave', function ($message) {
-    echo 'PS::beforeSave', '<br>', print_r($message), '<br>', '<br>';
-});
+subscription()
 
-PS::subscribe('afterSave', function ($message) {
-    echo 'PS::afterSave', '<br>', print_r($message), '<br>', '<br>';
-});
-
-// 
-PS::publish('beforeSave', 'test-before');
-PS::publish('afterSave', 'test-after');
-PS::publish('afterSave');
-
-// 
-PS::unsubscribe('beforeSave');
-
-// 
-PS::flush();
+flush()

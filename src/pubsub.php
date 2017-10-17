@@ -2,7 +2,7 @@
 
 class PS
 {
-    private static$events = []; // all subscriptions
+    private static $events = []; // all subscriptions
 
     private function __construct() { }
     private function __clone() { }
@@ -10,30 +10,30 @@ class PS
     /**
      * Subscribe a handler to a channel
      *
-     * @param string   $channel
+     * @param string   $name
      * @param callable $handler
      * 
      */
-    public static function subscribe(string $channel, callable $handler)
+    public static function subscribe(string $name, callable $handler)
     {
-        if (empty(self::$events[$channel]))
+        if (empty(self::$events[$name]))
         {
-            self::$events[$channel] = [];
+            self::$events[$name] = [];
         }
 
-        array_push(self::$events[$channel], $handler);
+        array_push(self::$events[$name], $handler);
     }
 
     /**
      * Calls the last subscription in the stack
      *
-     * @param string $channel
+     * @param string $name
      * @param string $args
      * 
      */
-    public static function publish(string $channel)
+    public static function publish(string $name)
     {
-        if (empty(self::$events[$channel]))
+        if (empty(self::$events[$name]))
         {
             return false;
         }
@@ -42,17 +42,17 @@ class PS
 
         array_shift($args);
 
-        if (count(self::$events[$channel]) === 1)
+        if (count(self::$events[$name]) === 1)
         {
-            if (is_callable(self::$events[$channel][0]))
+            if (is_callable(self::$events[$name][0]))
             {
                 if (!empty($args))
                 {
-                    return call_user_func_array(self::$events[$channel][0], $args);
+                    return call_user_func_array(self::$events[$name][0], $args);
                 }
                 else
                 {
-                    return call_user_func(self::$events[$channel][0], false);
+                    return call_user_func(self::$events[$name][0], false);
                 }
             }
             else
@@ -61,7 +61,7 @@ class PS
             }
         }
 
-        foreach (self::$events[$channel] as $event)
+        foreach (self::$events[$name] as $event)
         {
             if (is_callable($event))
             {
@@ -73,14 +73,14 @@ class PS
     /**
      * To unsubscribe from events
      *
-     * @param string $channel
+     * @param string $name
      * 
      */
-    public static function unsubscribe($channel)
+    public static function unsubscribe($name)
     {
-        if (!empty(self::$events[$channel]))
+        if (!empty(self::$events[$name]))
         {
-            unset(self::$events[$channel]);
+            unset(self::$events[$name]);
         }
     }
 
@@ -92,9 +92,9 @@ class PS
     {
         if (!empty(self::$events))
         {
-            foreach (self::$events as $channel => $handler)
+            foreach (self::$events as $name => $handler)
             {
-                unset(self::$events[$channel]);
+                unset(self::$events[$name]);
             }
         }
     }
@@ -103,32 +103,13 @@ class PS
      * List of events
      *
      */
-    public static function subscription(string $channel = '')
+    public static function subscription(string $name = '')
     {
-        if ($channel && !empty(self::$events[$channel]))
+        if ($name && !empty(self::$events[$name]))
         {
-            return self::$events[$channel];
+            return self::$events[$name];
         }
 
         return self::$events;
-    }
-}
-
-if (!function_exists('__')) {
-    function __()
-    {
-        $args = func_get_args();
-        $nargs = func_num_args();
-        $trace = debug_backtrace();
-        $caller = array_shift($trace);
-
-        $key = $caller['file'].':'.$caller['line'];
-
-        echo '<pre>', $key, "\n";
-        for ($i=0; $i<$nargs; $i++) {
-            echo print_r($args[$i], 1), "\n";
-        }
-        
-        echo '</pre>';
     }
 }
