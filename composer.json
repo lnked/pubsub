@@ -22,5 +22,6 @@
             "PS\\": "src/"
         },
         "files": ["src/pubsub.php"]
-    }
+    },
+    "minimum-stability": "stable"
 }
