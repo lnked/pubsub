@@ -4,8 +4,15 @@ class PS
 {
     private static $events = []; // all events
 
-    private function __construct() { }
-    private function __clone() { }
+    /**
+     * Prevent direct object creation
+     */
+    final private function  __construct() { }
+
+    /**
+     * Prevent object cloning
+     */
+    final private function  __clone() { }
 
     /**
      * Attach an event handler function for one or more events

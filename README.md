@@ -2,7 +2,7 @@
 
 ```shell
 curl -s http://getcomposer.org/installer | php
-php composer.phar require lnked/pubsub
+composer require lnked/pubsub
 ```
 
 Add an event onto the stack, you can add more than one event in one name:
@@ -25,7 +25,7 @@ PS::trigger('event-name', [1, 2, 3]);
 
 # Attach an event handler function for one or more events
 ```php
-PS::on('event-name', function(message) {
+PS::on('event-name', function($message) {
     echo $message;
 });
 ```
